@@ -13,7 +13,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { logedInUserInfo } from "../Slices/UserSlice";
+import { logedInUserInfo, userSlice } from "../Slices/UserSlice";
 
 const logInPage = () => {
   const dispes = useDispatch();
@@ -90,17 +90,24 @@ const logInPage = () => {
     } else {
       dispatch({ type: "RESET_KEY" });
     }
-    signInWithEmailAndPassword(auth, state.email, state.password)
-      .then((userCredential) => {
-        toast.success("Login Successful");
-        setTimeout(() => {
-          const user = userCredential.user;
-          dispes(logedInUserInfo(user));
-        }, 1000);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const user = {
+      name: "kayes",
+    };
+
+    if (state.email && state.password) {
+      localStorage.setItem("user", JSON.stringify(user));
+      // signInWithEmailAndPassword(auth, state.email, state.password)
+      //   .then((userCredential) => {
+      //     toast.success("Login Successful");
+      //     setTimeout(() => {
+      //       const user = userCredential.user;
+      //       dispes(logedInUserInfo(user));
+      //     }, 1000);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+    }
   };
   const handleGoogleProvider = () => {
     signInWithPopup(auth, provider)
