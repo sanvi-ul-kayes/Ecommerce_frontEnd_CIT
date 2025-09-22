@@ -107,7 +107,6 @@ const SignInPage = () => {
                 profile_picture: "login.jpg",
               }).then(() => {
                 setTimeout(() => {
-                  const auth = getAuth();
                   const user = userCredential.user;
                   navigate("/login");
                 }, 2000);

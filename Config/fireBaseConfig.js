@@ -9,6 +9,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyCmbyAGJjRhmUJ1E-Ru7U-SGibpaFZ6-Rc",
   authDomain: "practice-47451.firebaseapp.com",
+  databaseURL: "https://practice-47451-default-rtdb.firebaseio.com",
   projectId: "practice-47451",
   storageBucket: "practice-47451.firebasestorage.app",
   messagingSenderId: "845657782752",
@@ -18,7 +19,4 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-
-export default analytics
+export default firebaseConfig;
