@@ -12,8 +12,11 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { logedInUserInfo } from "../Slices/UserSlice";
 
 const logInPage = () => {
+  const dispes = useDispatch();
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
   const initialState = {
@@ -26,8 +29,6 @@ const logInPage = () => {
       password: "",
     },
   };
-
-  const [state, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state, action) {
     switch (action.type) {
@@ -65,6 +66,8 @@ const logInPage = () => {
     }
   }
 
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const handleSubmit = () => {
     const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
     const newError = {
@@ -89,8 +92,11 @@ const logInPage = () => {
     }
     signInWithEmailAndPassword(auth, state.email, state.password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
+        toast.success("Login Successful");
+        setTimeout(() => {
+          const user = userCredential.user;
+          dispes(logedInUserInfo(user));
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -99,9 +105,7 @@ const logInPage = () => {
   const handleGoogleProvider = () => {
     signInWithPopup(auth, provider)
       .then((result) => {})
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
   return (
     <>
