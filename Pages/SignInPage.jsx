@@ -14,6 +14,7 @@ import { DNA } from "react-loader-spinner";
 import { getDatabase, ref, set } from "firebase/database";
 
 const SignInPage = () => {
+  const date = new Date();
   const database = getDatabase();
   const auth = getAuth();
   const navigate = useNavigate();
@@ -104,12 +105,14 @@ const SignInPage = () => {
               set(ref(database, "users/" + userCredential.user.uid), {
                 username: userCredential.user.displayName,
                 email: userCredential.user.email,
+                date: `${
+                  date.getMonth() + 1
+                }-${date.getDate()}-${date.getFullYear()} & ${date.getHours()}: ${date.getMinutes()}:${date.getSeconds()}`,
                 profile_picture: "login.jpg",
               }).then(() => {
                 setTimeout(() => {
-                  const user = userCredential.user;
                   navigate("/login");
-                }, 2000);
+                }, 1000);
               });
             })
             .catch((error) => {

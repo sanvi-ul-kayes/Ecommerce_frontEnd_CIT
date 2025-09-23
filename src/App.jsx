@@ -4,9 +4,6 @@ import SignInPage from "./../Pages/SignInPage";
 import RootLayOut from "../LayOut/RootLayOut";
 import Home from "./../Pages/Home";
 
-const data = JSON.parse(localStorage.getItem("user"));
-console.log(data);
-
 const App = () => {
   return (
     <div>

@@ -1,15 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import GroupList from "../Components/GroupList";
 import FriendRequest from "../Components/FriendRequest";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { logedInUserInfo } from "../Slices/UserSlice";
 
 const Home = () => {
+  const auth = getAuth();
+  const dispatch = useDispatch();
+  const [varify, setVarify] = useState(false);
+  const navigate = useNavigate();
+  const data = useSelector((state) => state.userInfo.value);
+  console.log(data);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(logedInUserInfo(user));
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      navigate("/login");
+      setVarify(false);
+    }
+  });
+
+  useEffect(() => {
+    if (!data) {
+      navigate("/login");
+    } else if (!data.emailVerified) {
+      setVarify(false);
+    } else {
+      setVarify(true);
+    }
+  }, []);
+
   return (
-    <section>
-      <div>
-        <GroupList />
-        <FriendRequest />
-      </div>
-    </section>
+    <>
+      {varify ? (
+        <section>
+          <div>
+            <GroupList />
+            <FriendRequest />
+          </div>
+        </section>
+      ) : (
+        <div className="w-full h-screen bg-black/75 absolute top-0 left-0 text-white flex justify-center items-center">
+          <h1>Please Varify your Email</h1>
+        </div>
+      )}
+    </>
   );
 };
 

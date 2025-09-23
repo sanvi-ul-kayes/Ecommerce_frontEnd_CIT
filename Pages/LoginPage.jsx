@@ -12,11 +12,15 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+import { logedInUserInfo } from "../Slices/UserSlice";
 import { useDispatch } from "react-redux";
-import { logedInUserInfo, userSlice } from "../Slices/UserSlice";
 
 const logInPage = () => {
-  const dispes = useDispatch();
+  const dispas = useDispatch();
+  const date = new Date();
+  const navigate = useNavigate();
+  const database = getDatabase();
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
   const initialState = {
@@ -90,29 +94,40 @@ const logInPage = () => {
     } else {
       dispatch({ type: "RESET_KEY" });
     }
-    const user = {
-      name: "kayes",
-    };
 
     if (state.email && state.password) {
-      localStorage.setItem("user", JSON.stringify(user));
-      // signInWithEmailAndPassword(auth, state.email, state.password)
-      //   .then((userCredential) => {
-      //     toast.success("Login Successful");
-      //     setTimeout(() => {
-      //       const user = userCredential.user;
-      //       dispes(logedInUserInfo(user));
-      //     }, 1000);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+      signInWithEmailAndPassword(auth, state.email, state.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          dispas(logedInUserInfo(user));
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
   const handleGoogleProvider = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {})
-      .catch((error) => {});
+      .then((user) => {
+        set(ref(database, "users/" + user.user.uid), {
+          username: user.user.displayName,
+          email: user.user.email,
+          date: `${
+            date.getMonth() + 1
+          }-${date.getDate()}-${date.getFullYear()} & ${date.getHours()}: ${date.getMinutes()}:${date.getSeconds()}`,
+          profile_picture: user.user.photoURL,
+        });
+      })
+      .then(
+        setTimeout(() => {
+          navigate("/");
+        }, 1000)
+      )
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <>
