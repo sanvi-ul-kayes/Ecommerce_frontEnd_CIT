@@ -120,11 +120,11 @@ const logInPage = () => {
           profile_picture: user.user.photoURL,
         });
       })
-      .then(
+      .then(() => {
         setTimeout(() => {
           navigate("/");
-        }, 1000)
-      )
+        }, 1000);
+      })
       .catch((error) => {
         console.log(error);
       });

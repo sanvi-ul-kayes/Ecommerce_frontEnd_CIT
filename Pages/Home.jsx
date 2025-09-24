@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { logedInUserInfo } from "../Slices/UserSlice";
+import UserList from "./../Components/UserList";
 
 const Home = () => {
   const auth = getAuth();
@@ -37,9 +38,13 @@ const Home = () => {
   return (
     <>
       {varify ? (
-        <section>
+        <section className="flex gap-5 items-center">
           <div>
             <GroupList />
+            <FriendRequest />
+          </div>
+          <div>
+            <UserList />
             <FriendRequest />
           </div>
         </section>

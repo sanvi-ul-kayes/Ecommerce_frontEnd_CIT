@@ -112,7 +112,7 @@ const SignInPage = () => {
               }).then(() => {
                 setTimeout(() => {
                   navigate("/login");
-                }, 1000);
+                }, []);
               });
             })
             .catch((error) => {
