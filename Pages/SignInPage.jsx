@@ -32,8 +32,6 @@ const SignInPage = () => {
     },
   };
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
   function reducer(state, action) {
     switch (action.type) {
       case "SET_VALUE":
@@ -69,9 +67,10 @@ const SignInPage = () => {
         return state;
     }
   }
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleSubmit = () => {
-    const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+    const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/i;
     const newError = {
       email: !state.email
         ? "Enter Your Email"
@@ -108,11 +107,11 @@ const SignInPage = () => {
                 date: `${
                   date.getMonth() + 1
                 }-${date.getDate()}-${date.getFullYear()} & ${date.getHours()}: ${date.getMinutes()}:${date.getSeconds()}`,
-                profile_picture: "login.jpg",
+                profile_picture: userCredential.user.profile_picture,
               }).then(() => {
                 setTimeout(() => {
                   navigate("/login");
-                }, []);
+                });
               });
             })
             .catch((error) => {
@@ -127,7 +126,7 @@ const SignInPage = () => {
                     },
                   });
                 }
-              }, 2000);
+              });
             });
         });
       }

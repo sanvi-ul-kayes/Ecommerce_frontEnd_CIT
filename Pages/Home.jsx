@@ -13,7 +13,6 @@ const Home = () => {
   const [varify, setVarify] = useState(false);
   const navigate = useNavigate();
   const data = useSelector((state) => state.userInfo.value);
-  console.log(data);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
