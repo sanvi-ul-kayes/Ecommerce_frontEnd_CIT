@@ -3,8 +3,10 @@ import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import List from "./List";
 import { getDatabase, ref, onValue } from "firebase/database";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const UserList = () => {
+  const data = useSelector((state) => state.userInfo.value);
   const db = getDatabase();
   const [userList, setUserList] = useState([]);
 
@@ -13,9 +15,10 @@ const UserList = () => {
     onValue(userListRef, (snapshot) => {
       const array = [];
       snapshot.forEach((items) => {
-        array.push(items.val());
+        {
+          data.uid != items.key && array.push(items.val());
+        }
       });
-      console.log(array);
       setUserList(array);
     });
   }, []);

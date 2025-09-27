@@ -94,10 +94,12 @@ const SignInPage = () => {
     }
     createUserWithEmailAndPassword(auth, state.email, state.password).then(
       (userCredential) => {
+        console.log(userCredential);
         sendEmailVerification(auth.currentUser).then(() => {
+          console.log(userCredential);
           updateProfile(auth.currentUser, {
             displayName: state.name,
-            photoURL: "login.jpg",
+            photoURL: photoURL,
           })
             .then(() => {
               toast.success("Registration successful");
@@ -107,11 +109,11 @@ const SignInPage = () => {
                 date: `${
                   date.getMonth() + 1
                 }-${date.getDate()}-${date.getFullYear()} & ${date.getHours()}: ${date.getMinutes()}:${date.getSeconds()}`,
-                profile_picture: userCredential.user.profile_picture,
+                profile_picture: userCredential.user.photoURL,
               }).then(() => {
                 setTimeout(() => {
                   navigate("/login");
-                });
+                }, 1000);
               });
             })
             .catch((error) => {
